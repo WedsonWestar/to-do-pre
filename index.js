@@ -37,6 +37,7 @@ function createItem(item) {
 
 	deleteButton.addEventListener("click", event => {
 		clone.remove();
+
 		items = getTasksFromDOM();
 		saveTasks(items);
 	});
@@ -45,6 +46,19 @@ function createItem(item) {
 		const itemName = textElement.textContent;
 		const newItem = createItem(itemName);
 		listElement.prepend(newItem);
+
+		items = getTasksFromDOM();
+		saveTasks(items);
+	});
+
+	editButton.addEventListener("click", event => {
+		textElement.contentEditable = true;
+		textElement.focus();
+	});
+
+	textElement.addEventListener("blur", event => {
+		textElement.contentEditable = false;
+
 		items = getTasksFromDOM();
 		saveTasks(items);
 	});

@@ -12,8 +12,13 @@ const formElement = document.querySelector(".to-do__form");
 const inputElement = document.querySelector(".to-do__input");
 
 function loadTasks() {
-	// const savedTasks = localStorage.getItem("tasks");
-	return items;
+	try {
+		const raw = localStorage.getItem("tasks");
+		return raw ? JSON.parse(raw) : items;
+	} catch(e) {
+		console.warn("Couldn't load tasks from local, using default:", e);
+		return items;
+	}
 }
 
 function createItem(item) {
@@ -36,11 +41,16 @@ function createItem(item) {
 }
 
 function getTasksFromDOM() {
+	const itemsNamesElements = document.querySelectorAll(".to-do__item-text");
+	const tasks = [];
 
+	itemsNamesElements.forEach(item => tasks.push(item.textContent.trim()));
+	
+	return tasks;
 }
 
 function saveTasks(tasks) {
-
+	localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
 items = loadTasks();
@@ -54,6 +64,9 @@ formElement.addEventListener("submit", (event) => {
 	if (!item) return;
 
 	listElement.prepend(createItem(item));
+
+	items = getTasksFromDOM();
+	saveTasks(items);
 
 	inputElement.value = "";
 	inputElement.focus();

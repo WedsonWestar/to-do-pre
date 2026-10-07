@@ -35,7 +35,13 @@ function createItem(item) {
 	const editButton = clone.querySelector(".to-do__item-button_type_edit");
 
 
+	deleteButton.addEventListener("click", event => {
+		clone.remove();
+		items = getTasksFromDOM();
+		saveTasks(items);
+	});
 
+	
 
 	return clone;
 }
@@ -57,7 +63,7 @@ items = loadTasks();
 
 items.forEach(item => listElement.append(createItem(item)));
 
-formElement.addEventListener("submit", (event) => {
+formElement.addEventListener("submit", event => {
 	event.preventDefault();
 
 	const item = inputElement.value.trim();
